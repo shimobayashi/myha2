@@ -2,8 +2,8 @@
 
 require 'json'
 
-AIRCON_COOLER_ON_THRESHOLD = 81
-AIRCON_COOLER_OFF_THRESHOLD = 79
+AIRCON_COOLER_ON_THRESHOLD = 81.5
+AIRCON_COOLER_OFF_THRESHOLD = 78.5
 
 def aircon_cooler_on
   `irsend SEND_ONCE aircon on_cooler_27`
