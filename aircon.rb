@@ -27,9 +27,15 @@ end
 settings = JSON.parse(STDIN.read)
 p settings
 
-discomfort_index = settings['discomfort_index'].to_f
-if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['home'] != '0' && settings['sleep'] != '0') && settings['aircon_on_cooler_27'] == '0' # 在宅中かつ就寝中
-  aircon_cooler_on
-elsif (discomfort_index < AIRCON_COOLER_OFF_THRESHOLD || settings['home'] == '0' || settings['sleep'] == '0') && settings['aircon_on_cooler_27'] != '0'
+diff = Time.now.to_i - (settings['sleep'] || '0').to_i
+p diff
+if diff < 120 # 赤外線LEDの向きがあってるか確認するため&エアコン手動でつけっぱだったら同期するためにOFFを送る
   aircon_off
+else
+  discomfort_index = settings['discomfort_index'].to_f
+  if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['home'] != '0' && settings['sleep'] != '0') && settings['aircon_on_cooler_27'] == '0' # 在宅中かつ就寝中
+    aircon_cooler_on
+  elsif (discomfort_index < AIRCON_COOLER_OFF_THRESHOLD || settings['home'] == '0' || settings['sleep'] == '0') && settings['aircon_on_cooler_27'] != '0'
+    aircon_off
+  end
 end
