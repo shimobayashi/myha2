@@ -2,7 +2,7 @@
 
 from TSL2561 import *
 
-tsl = TSL2561() 
+tsl = TSL2561(1)
  
 if tsl.foundSensor(): 
     #print("Found sensor...")

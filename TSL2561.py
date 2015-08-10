@@ -299,7 +299,7 @@ xad = 0x0A
 iodir_register = 0x00
 gpio_register = 0x09
 
-with i2c.I2CMaster(0) as bus:    
+with i2c.I2CMaster(1) as bus:
     read_results = bus.transaction(
         i2c.writing_bytes(address, xad),
         i2c.reading(address, 1)
