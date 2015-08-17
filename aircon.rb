@@ -2,7 +2,7 @@
 
 require 'json'
 
-AIRCON_COOLER_ON_THRESHOLD = 81.3
+AIRCON_COOLER_ON_THRESHOLD = 80.9
 AIRCON_COOLER_OFF_THRESHOLD = 79.1
 
 def aircon_cooler_on
