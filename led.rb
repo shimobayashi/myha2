@@ -16,9 +16,9 @@ else # 在宅中
     t = Time.now
     p t
 
-    if (settings['lux'] || '0').to_i > 2500 # 日中でカーテンを両方開けていれば電気をつけない
+    if (settings['lux'] || '0').to_i > 3000 # 日中でカーテンを両方開けていれば電気をつけない
       cmd = "\\x41\\x00\\x55" # 消灯
-    elsif (settings['lux'] || '0').to_i <= 2000 # 日中でカーテン片方閉じたくらいの暗さであれば電気をつける
+    elsif (settings['lux'] || '0').to_i <= 2500 # 日中でカーテン片方閉じたくらいの暗さであれば電気をつける
       cmd = "\\x42\\x00\\x55" # 点灯
       if settings['time_to_sleep'] != '0' # 寝る時間
         cmd2 = "\\x40\\xa0\\x55" # 赤色
