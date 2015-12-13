@@ -2,4 +2,3 @@ curl $JSONJAR_ROOT > /tmp/jsonjar.json
 cat /tmp/jsonjar.json | ./jsonjar2mackerel.rb | logger -t myha2-jsonjar2mackerel
 cat /tmp/jsonjar.json | ./led.rb              | logger -t myha2-led
 cat /tmp/jsonjar.json | ./aircon.rb           | logger -t myha2-aircon
-#cat /tmp/jsonjar.json | ./webcam2vimage.rb    | logger -t myha2-webcam2vimage
