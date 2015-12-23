@@ -11,6 +11,7 @@ def send_cmd(cmd)
   p cmd
   p `bash -c 'echo -ne "#{cmd}" > /dev/udp/192.168.10.16/8899'`
   p $?
+  sleep 0.1
 end
 
 ## lightとcolor, brightnessは排他
@@ -52,9 +53,6 @@ send_cmd(cmd)
 
 # 色
 if light
-  sleep 0.1
-  send_cmd("\\x42\\x00\\x55")
-  sleep 0.1
   if color
     cmd = "\\x40#{color}\\x55"
     send_cmd(cmd)
@@ -66,9 +64,6 @@ end
 
 # 明るさ
 if light && brightness
-  sleep 0.1
-  send_cmd("\\x42\\x00\\x55")
-  sleep 0.1
   cmd = "\\4e#{brightness}\\x55"
   send_cmd(cmd)
 end
