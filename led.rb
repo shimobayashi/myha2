@@ -46,14 +46,15 @@ else # 在宅中
   end
 end
 
-# 点灯・消灯
+# 点灯 or 消灯
 cmd = light ? "\\x42\\x00\\x55" : "\\x41\\x00\\x55"
 send_cmd(cmd)
 
-if light && (color || brightness)
+# 色
+if light && color
   sleep 0.1
-
-  # 色
+  send_cmd("\\x42\\x00\\x55")
+  sleep 0.1
   if color
     cmd = "\\x40#{color}\\x55"
     send_cmd(cmd)
@@ -61,10 +62,13 @@ if light && (color || brightness)
     cmd = "\\xC2\\x00\\x55"
     send_cmd(cmd)
   end
+end
 
-  # 明るさ
-  if brightness
-    cmd = "\\4e#{brightness}\\x55"
-    send_cmd(cmd)
-  end
+# 明るさ
+if light && brightness
+  sleep 0.1
+  send_cmd("\\x42\\x00\\x55")
+  sleep 0.1
+  cmd = "\\4e#{brightness}\\x55"
+  send_cmd(cmd)
 end
