@@ -7,42 +7,62 @@ puts 'read settings...'
 settings = JSON.parse(STDIN.read)
 p settings
 
-cmd = nil
-cmd2 = nil
+def send_cmd(cmd)
+  p `bash -c 'echo -ne "#{cmd}" > /dev/udp/192.168.10.16/8899'`
+  p $?
+end
+
+## lightとcolor, brightnessは排他
+light = false
+color = nil # nil = white
+brightness = nil
+
 if settings['home'] == '0' # 外出中
-  cmd = "\\x41\\x00\\x55" # 消灯
+  light = false
 else # 在宅中
   if settings['sleep'] == '0' # 寝てない
     t = Time.now
     p t
 
     if (settings['lux'] || '0').to_i > 3000 # 日中でカーテンを両方開けていれば電気をつけない
-      cmd = "\\x41\\x00\\x55" # 消灯
+      light = false
     elsif (settings['lux'] || '0').to_i <= 2500 # 日中でカーテン片方閉じたくらいの暗さであれば電気をつける
-      cmd = "\\x42\\x00\\x55" # 点灯
+      light = true
+      brightness = "\\x1b" # 最大
       if settings['time_to_sleep'] != '0' # 寝る時間
-        cmd2 = "\\x40\\xa0\\x55" # 赤色
+        color = "\\xa0" # 赤色
+        brightness = "\\x02" # 最低
       elsif (t.hour >= 23 || t.hour < 5) # 23時～5時
-        cmd2 = "\\x40\\x95\\x55" # 赤っぽい暖色
+        color = "\\x95" # 赤っぽい暖色
       elsif t.hour >= 21 # 21時～23時
-        cmd2 = "\\x40\\x90\\x55" # 暖色
+        color = "\\x90" # 暖色
       else
-        cmd2 = "\\xC2\\x00\\x55" # 白色
+        color = nil # 白色
       end
     end
   else # 寝てる
-    cmd = "\\x41\\x00\\x55" # 消灯
+    light = false
   end
 end
 
-p cmd
-if cmd
-  p `bash -c 'echo -ne "#{cmd}" > /dev/udp/192.168.10.16/8899'`
-  p $?
-end
-p cmd2
-if cmd2
+# 点灯・消灯
+cmd = light ? "\\x42\\x00\\x55" : "\\x41\\x00\\x55"
+send_cmd(cmd)
+
+if light && (color || brightness)
   sleep 0.1
-  p `bash -c 'echo -ne "#{cmd2}" > /dev/udp/192.168.10.16/8899'`
-  p $?
+
+  # 色
+  if color
+    cmd = "\\x40#{color}\\x55"
+    send_cmd(cmd)
+  else
+    cmd = "\\xC2\\x00\\x55"
+    send_cmd(cmd)
+  end
+
+  # 明るさ
+  if brightness
+    cmd = "\\4e#{brightness}\\x55"
+  end
 end
