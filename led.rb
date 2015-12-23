@@ -8,6 +8,7 @@ settings = JSON.parse(STDIN.read)
 p settings
 
 def send_cmd(cmd)
+  p cmd
   p `bash -c 'echo -ne "#{cmd}" > /dev/udp/192.168.10.16/8899'`
   p $?
 end
@@ -64,5 +65,6 @@ if light && (color || brightness)
   # 明るさ
   if brightness
     cmd = "\\4e#{brightness}\\x55"
+    send_cmd(cmd)
   end
 end
