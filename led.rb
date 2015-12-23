@@ -51,7 +51,7 @@ cmd = light ? "\\x42\\x00\\x55" : "\\x41\\x00\\x55"
 send_cmd(cmd)
 
 # 色
-if light && color
+if light
   sleep 0.1
   send_cmd("\\x42\\x00\\x55")
   sleep 0.1
