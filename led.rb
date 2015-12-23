@@ -53,6 +53,7 @@ send_cmd(cmd)
 
 # 色
 if light
+  send_cmd("\\x42\\x00\\x55")
   if color
     cmd = "\\x40#{color}\\x55"
     send_cmd(cmd)
@@ -64,6 +65,7 @@ end
 
 # 明るさ
 if light && brightness
+  send_cmd("\\x42\\x00\\x55")
   cmd = "\\4e#{brightness}\\x55"
   send_cmd(cmd)
 end
