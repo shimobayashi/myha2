@@ -4,6 +4,8 @@ require 'json'
 
 AIRCON_COOLER_ON_THRESHOLD = 80.9
 AIRCON_COOLER_OFF_THRESHOLD = 79.1
+AIRCON_HEATER_ON_THRESHOLD = 60.0
+AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
 def aircon_cooler_on
   `irsend SEND_ONCE aircon on_cooler_27`
@@ -13,6 +15,16 @@ def aircon_cooler_on
   puts "cooloer_on: #{$?}"
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=#{epoch}`
+end
+
+def aircon_heater_on
+  `irsend SEND_ONCE aircon on_heater_25`
+  puts "heater_on: #{$?}"
+  sleep 0.5
+  `irsend SEND_ONCE aircon on_heater_25`
+  puts "heater_on: #{$?}"
+  epoch = Time.now.to_i
+  `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=#{epoch}`
 end
 
 def aircon_off
@@ -33,9 +45,20 @@ if diff < 120 # 赤外線LEDの向きがあってるか確認するため&エア
   aircon_off
 else
   discomfort_index = settings['discomfort_index'].to_f
+
+  # 冷房
   if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['home'] != '0' && settings['sleep'] != '0') && settings['aircon_on_cooler_27'] == '0' # 在宅中かつ就寝中
     aircon_cooler_on
   elsif (discomfort_index < AIRCON_COOLER_OFF_THRESHOLD || settings['home'] == '0' || settings['sleep'] == '0') && settings['aircon_on_cooler_27'] != '0'
+    aircon_off
+  end
+
+  # 暖房
+  if (discomfort_index < AIRCON_HEATER_ON_THRESHOLD && settings['home'] != '0' && settings['sleep'] != '0') && settings['aircon_on_heater_25'] == '0' # 在宅中かつ就寝中
+    if diff > 7 * 60 * 60 # 就寝から7時間以上経過
+      aircon_heater_on
+    end
+  elsif (discomfort_index > AIRCON_HEATER_ON_THRESHOLD || settings['home'] == '0' || settings['sleep'] == '0') && settings['aircon_on_heater_25'] != '0'
     aircon_off
   end
 end
