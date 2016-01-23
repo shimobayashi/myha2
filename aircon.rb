@@ -34,6 +34,7 @@ def aircon_off
   `irsend SEND_ONCE aircon off`
   puts "off: #{$?}"
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=0`
+  `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=0`
 end
 
 settings = JSON.parse(STDIN.read)
