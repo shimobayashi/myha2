@@ -29,5 +29,10 @@ json = [
     time: epoch,
     value: settings['aircon_on_cooler_27'].to_i,
   },
+  {
+    name: 'aircon.on_heater_25',
+    time: epoch,
+    value: settings['aircon_on_heater_25'].to_i,
+  },
 ].to_json
 p `curl https://mackerel.io/api/v0/services/myha2/tsdb -H 'X-Api-Key: #{api_key}' -H 'Content-Type: application/json' -X POST -d '#{json}'`
