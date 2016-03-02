@@ -7,7 +7,7 @@ puts 'read settings...'
 settings = JSON.parse(STDIN.read)
 p settings
 
-exit if settings['home'] == '1' # 手動運転中
+exit if settings['manual_led'] == '1' # 手動運転中
 
 cmd = nil
 cmd2 = nil
