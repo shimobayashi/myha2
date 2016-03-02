@@ -7,6 +7,8 @@ puts 'read settings...'
 settings = JSON.parse(STDIN.read)
 p settings
 
+exit if settings['home'] == '1' # 手動運転中
+
 cmd = nil
 cmd2 = nil
 if settings['home'] == '0' # 外出中
