@@ -8,31 +8,25 @@ AIRCON_HEATER_ON_THRESHOLD = 60.0
 AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
 def aircon_cooler_on
-  `irsend SEND_ONCE aircon on_cooler_27`
+  `curl http://192.168.10.18/messages -d \`cat aircon_on_cooler_27.irkit\``
   puts "cooloer_on: #{$?}"
   sleep 0.5
-  `irsend SEND_ONCE aircon on_cooler_27`
-  puts "cooloer_on: #{$?}"
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=#{epoch}`
 end
 
 def aircon_heater_on
-  `irsend SEND_ONCE aircon on_heater_25`
+  `curl http://192.168.10.18/messages -d \`cat aircon_on_heater_25.irkit\``
   puts "heater_on: #{$?}"
   sleep 0.5
-  `irsend SEND_ONCE aircon on_heater_25`
-  puts "heater_on: #{$?}"
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=#{epoch}`
 end
 
 def aircon_off
-  `irsend SEND_ONCE aircon off`
+  `curl http://192.168.10.18/messages -d \`cat aircon_off.irkit\``
   puts "off: #{$?}"
   sleep 0.5
-  `irsend SEND_ONCE aircon off`
-  puts "off: #{$?}"
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=0`
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=0`
 end
