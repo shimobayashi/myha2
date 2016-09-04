@@ -33,7 +33,13 @@ else # 在宅中
       end
     end
   else # 寝てる
-    cmd = "\\x41\\x00\\x55" # 消灯
+    diff = Time.now.to_i - ((settings['lux'] || '0').to_i + 30 * 60) # アラーム45分前時点のunixtimeに更新されるので、そこから30分後～の間
+    if diff > 0
+      cmd = "\\x42\\x00\\x55" # 点灯
+      cmd2 = "\\x40\\xa0\\x55" # 赤色
+    else
+      cmd = "\\x41\\x00\\x55" # 消灯
+    end
   end
 end
 
