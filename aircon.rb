@@ -2,14 +2,15 @@
 
 require 'json'
 
-AIRCON_COOLER_ON_THRESHOLD = 79.0
+AIRCON_COOLER_ON_THRESHOLD = 80.0
 AIRCON_COOLER_OFF_THRESHOLD = 78.0
 AIRCON_HEATER_ON_THRESHOLD = 60.0
 AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
 def aircon_cooler_on
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_cooler_27.irkit` ]
+  #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_cooler_27.irkit` ]
   #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_28.irkit` ]
+  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
   puts "cooloer_on: #{$?}"
   sleep 0.5
   epoch = Time.now.to_i
