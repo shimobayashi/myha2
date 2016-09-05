@@ -33,7 +33,7 @@ else # 在宅中
       end
     end
   else # 寝てる
-    diff = Time.now.to_i - (settings['lux'] || '0').to_i # アラーム45分前時点のunixtimeに更新されるので、そこから35分後～の10分間
+    diff = Time.now.to_i - (settings['auto_start_sleep_track'] || '0').to_i # アラーム45分前時点のunixtimeに更新されるので、そこから35分後～の10分間
     if diff > 35 * 60 && diff < 45 * 60
       cmd = "\\x42\\x00\\x55" # 点灯
       cmd2 = "\\x40\\xa0\\x55" # 赤色
