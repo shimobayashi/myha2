@@ -34,5 +34,27 @@ json = [
     time: epoch,
     value: settings['aircon_on_heater_25'].to_i,
   },
-].to_json
-p `curl https://mackerel.io/api/v0/services/myha2/tsdb -H 'X-Api-Key: #{api_key}' -H 'Content-Type: application/json' -X POST -d '#{json}'`
+]
+
+# Calc for beacon1
+temperature = settings['beacon1_temperature'].to_f
+humidity = settings['beacon1_humidity'].to_f
+discomfort_index = 0.81 * temperature + 0.01 * humidity * (0.99 * temperature - 14.3) + 46.3
+json << {
+    name: 'beacon1.temperature',
+    time: epoch,
+    value: temperature.round(1),
+}
+json << {
+    name: 'beacon1.humidity',
+    time: epoch,
+    value: humidity.round(1),
+}
+json << {
+    name: 'beacon1.discomfort_index',
+    time: epoch,
+    value: discomfort_index.round(1),
+}
+
+# Post to mackerel.io
+p `curl https://mackerel.io/api/v0/services/myha2/tsdb -H 'X-Api-Key: #{api_key}' -H 'Content-Type: application/json' -X POST -d '#{json.to_json}'`
