@@ -13,6 +13,10 @@ def aircon_cooler_on
   %x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
   puts "cooloer_on: #{$?}"
   sleep 0.5
+  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
+  puts "cooloer_on: #{$?}"
+  sleep 0.5
+
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=#{epoch}`
 end
@@ -21,6 +25,10 @@ def aircon_heater_on
   %x[ curl http://192.168.10.18/messages -d `cat aircon_on_heater_25.irkit` ]
   puts "heater_on: #{$?}"
   sleep 0.5
+  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_heater_25.irkit` ]
+  puts "heater_on: #{$?}"
+  sleep 0.5
+
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=#{epoch}`
 end
@@ -29,6 +37,10 @@ def aircon_off
   %x[ curl http://192.168.10.18/messages -d `cat aircon_off.irkit` ]
   puts "off: #{$?}"
   sleep 0.5
+  %x[ curl http://192.168.10.18/messages -d `cat aircon_off.irkit` ]
+  puts "off: #{$?}"
+  sleep 0.5
+
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=0`
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_heater_25=0`
 end
