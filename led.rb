@@ -41,7 +41,7 @@ else # 在宅中
     alert_time = (settings['auto_start_sleep_track'] || '0').to_i + 45 * 60 + SMART_PERIOD_SPAN
     diff = Time.now.to_i - alert_time
     p diff
-    if (diff > -(SMART_PERIOD_SPAN + 5) * 60) && (diff < 0 * 60) # アラートスマートピリオド+5分前～0分後まで
+    if (diff > -(SMART_PERIOD_SPAN + 0) * 60) && (diff < 0 * 60) # アラートスマートピリオド+0分前～0分後まで
       cmd = "\\x42\\x00\\x55" # 点灯
       cmd2 = "\\x40\\xa0\\x55" # 赤色
     else
