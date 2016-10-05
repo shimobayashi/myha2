@@ -2,8 +2,6 @@
 
 require 'json'
 
-SMART_PERIOD_SPAN = 10 * 60; # スマートウェイクアップの許容範囲の設定時間
-
 puts 'read settings...'
 
 settings = JSON.parse(STDIN.read)
@@ -35,13 +33,12 @@ else # 在宅中
       end
     end
   else # 寝てる
-    # アラート近くで電灯を軽く点けて目覚ましをうながす
-    # auto_start_sleep_trackはスマートウェイクアップの45分前のunixtimeが設定される
-    # つまり、 アラート時刻=auto_start_sleep_track+45*60+SMART_PERIOD_SPAN で求められる
-    alert_time = (settings['auto_start_sleep_track'] || '0').to_i + 45 * 60 + SMART_PERIOD_SPAN
-    diff = Time.now.to_i - alert_time
+    # auto_start_sleep_trackはスマートウェイクアップ=アラームが鳴りうる開始時間の45分前のunixtimeが設定される
+    # なので+45分するとスマートウェイクアップ開始時間が分かる
+    smart_period = (settings['auto_start_sleep_track'] || '0').to_i + 45 * 60
+    diff = Time.now.to_i - smart_period
     p diff
-    if (diff > -(SMART_PERIOD_SPAN + 0 * 60) && (diff < 0 * 60) # アラートスマートピリオド+0分前～0分後まで
+    if diff > 0 # スマートウェイクアップ開始後で寝ていれば灯火する
       cmd = "\\x42\\x00\\x55" # 点灯
       cmd2 = "\\x40\\xa0\\x55" # 赤色
     else
