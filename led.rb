@@ -38,7 +38,7 @@ else # 在宅中
     smart_period = (settings['auto_start_sleep_track'] || '0').to_i + 45 * 60
     diff = Time.now.to_i - smart_period
     p diff
-    if diff > 0 # スマートウェイクアップ開始後で寝ていれば灯火する
+    if (diff > 0) && (diff < 60 * 60) # スマートウェイクアップ開始後で寝ていれば灯火する。1時間以上経過していたら多分次の日の睡眠とかなので灯火しない
       cmd = "\\x42\\x00\\x55" # 点灯
       cmd2 = "\\x40\\xa0\\x55" # 赤色
     else
