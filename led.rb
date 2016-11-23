@@ -18,18 +18,26 @@ else # 在宅中
     t = Time.now
     p t
 
-    if (settings['lux'] || '0').to_i > 3000 # 日中でカーテンを両方開けていれば電気をつけない
-      cmd = "\\x41\\x00\\x55" # 消灯
-    elsif (settings['lux'] || '0').to_i <= 2500 # 日中でカーテン片方閉じたくらいの暗さであれば電気をつける
+    # 点灯ボタン押してから一定時間は無条件に最強の点灯する
+    diff = Time.now.to_i - (settings['force_light'] || '0').to_i
+    p diff
+    if (diff < 60 * 1) #XXX test
       cmd = "\\x42\\x00\\x55" # 点灯
-      if settings['time_to_sleep'] != '0' # 寝る時間
-        cmd2 = "\\x40\\xa0\\x55" # 赤色
-      elsif (t.hour >= 23 || t.hour < 5) # 23時～5時
-        cmd2 = "\\x40\\x95\\x55" # 赤っぽい暖色
-      elsif t.hour >= 21 # 21時～23時
-        cmd2 = "\\x40\\x90\\x55" # 暖色
-      else
-        cmd2 = "\\xC2\\x00\\x55" # 白色
+      cmd2 = "\\x40\\x90\\x55" # 暖色
+    else
+      if (settings['lux'] || '0').to_i > 3000 # 日中でカーテンを両方開けていれば電気をつけない
+        cmd = "\\x41\\x00\\x55" # 消灯
+      elsif (settings['lux'] || '0').to_i <= 2500 # 日中でカーテン片方閉じたくらいの暗さであれば電気をつける
+        cmd = "\\x42\\x00\\x55" # 点灯
+        if settings['time_to_sleep'] != '0' # 寝る時間
+          cmd2 = "\\x40\\xa0\\x55" # 赤色
+        elsif (t.hour >= 23 || t.hour < 5) # 23時～5時
+          cmd2 = "\\x40\\x95\\x55" # 赤っぽい暖色
+        elsif t.hour >= 21 # 21時～23時
+          cmd2 = "\\x40\\x90\\x55" # 暖色
+        else
+          cmd2 = "\\xC2\\x00\\x55" # 白色
+        end
       end
     end
   else # 寝てる
