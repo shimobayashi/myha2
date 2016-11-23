@@ -21,9 +21,9 @@ else # 在宅中
     # 点灯ボタン押してから一定時間は無条件に最強の点灯する
     diff = Time.now.to_i - (settings['force_light'] || '0').to_i
     p diff
-    if (diff < 60 * 1) #XXX test
+    if (diff < 60 * 20)
       cmd = "\\x42\\x00\\x55" # 点灯
-      cmd2 = "\\x40\\x90\\x55" # 暖色
+      cmd2 = "\\xC2\\x00\\x55" # 白色
     else
       if (settings['lux'] || '0').to_i > 3000 # 日中でカーテンを両方開けていれば電気をつけない
         cmd = "\\x41\\x00\\x55" # 消灯
