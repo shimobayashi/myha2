@@ -31,10 +31,10 @@ else # 在宅中
         cmd = "\\x42\\x00\\x55" # 点灯
         if settings['time_to_sleep'] != '0' # 寝る時間
           cmd2 = "\\x40\\xa0\\x55" # 赤色
-        elsif (t.hour >= 23 || t.hour < 5) # 23時～5時
-          cmd2 = "\\x40\\x95\\x55" # 赤っぽい暖色
-        elsif t.hour >= 21 # 21時～23時
-          cmd2 = "\\x40\\x90\\x55" # 暖色
+        #elsif (t.hour >= 23 || t.hour < 5) # 23時～5時
+        #  cmd2 = "\\x40\\x95\\x55" # 赤っぽい暖色
+        #elsif t.hour >= 21 # 21時～23時
+        #  cmd2 = "\\x40\\x90\\x55" # 暖色
         else
           cmd2 = "\\xC2\\x00\\x55" # 白色
         end
