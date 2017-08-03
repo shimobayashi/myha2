@@ -65,17 +65,16 @@ if settings['home'] != '0' # 在宅中
     discomfort_index = settings['discomfort_index'].to_f
 
     # 冷房
-    if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['sleep'] != '0')
-      # 常に強冷房だと頻繁にON/OFFがかかって身体がおかしくなるので、段階的に冷房をつけてみる
-      if (settings['aircon_on_cooler_27'] == '0') # 冷房ついてなかったらとりあえず弱めでつける
-        aircon_cooler_28_on
-      else
-        cooler_diff = Time.now.to_i - (settings['aircon_on_cooler_27'] || '0').to_i
-        puts "cooler_diff: #{cooler_diff}"
-        if cooler_diff >= 1.0 * 60 * 60 # 弱め冷房から1時間以上経っていたら強める #XXX 現状の雑な実装だと1時間毎に冷房を入れ直してビープ音が鳴ってしまうが、2時間もあれば十分に冷えて基本的には冷房オフになっているはずなのでいったん気にしない
-          aircon_cooler_27_on
-        end
-      end
+    cooler_diff = Time.now.to_i - (settings['aircon_on_cooler_27'] || '0').to_i
+    puts "cooler_diff: #{cooler_diff}"
+    # 常に強冷房だと頻繁にON/OFFがかかって身体がおかしくなるので、段階的に冷房をつけてみる
+    # 冷房ついてなかったらとりあえず弱めでつける
+    if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['sleep'] != '0') && settings['aircon_on_cooler_27'] == '0'
+      aircon_cooler_28_on
+    # 弱め冷房から1時間以上経っていたら強める
+    #XXX 現状の雑な実装だと1時間毎に冷房を入れ直してビープ音が鳴ってしまうが、2時間もあれば十分に冷えて基本的には冷房オフになっているはずなのでいったん気にしない
+    elsif settings['sleep'] != '0' && settings['aircon_on_cooler_27'] != '0' && cooler_diff >= 1.0 * 60 * 60
+      aircon_cooler_27_on
     elsif (discomfort_index < AIRCON_COOLER_OFF_THRESHOLD || settings['sleep'] == '0') && settings['aircon_on_cooler_27'] != '0'
       aircon_off
     end
