@@ -7,18 +7,25 @@ AIRCON_COOLER_OFF_THRESHOLD = 78.25
 AIRCON_HEATER_ON_THRESHOLD = 60.0
 AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
-def aircon_cooler_on
+def aircon_cooler_on(irkit_file)
   #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_cooler_27.irkit` ]
   #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_28.irkit` ]
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
+  #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "cooloer_on: #{$?}"
   sleep 0.5
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_27.irkit` ]
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "cooloer_on: #{$?}"
   sleep 0.5
 
   epoch = Time.now.to_i
   `curl #{ENV['JSONJAR_ROOT']}?aircon_on_cooler_27=#{epoch}`
+end
+def aircon_cooler_27_on
+  aircon_cooler_on('aircon_on_dehumidify_27.irkit')
+end
+def aircon_cooler_28_on
+  aircon_cooler_on('aircon_on_dehumidify_28.irkit')
 end
 
 def aircon_heater_on
@@ -58,7 +65,7 @@ if settings['home'] != '0' # 在宅中
 
     # 冷房
     if (discomfort_index > AIRCON_COOLER_ON_THRESHOLD && settings['sleep'] != '0') && settings['aircon_on_cooler_27'] == '0'
-      aircon_cooler_on
+      aircon_cooler_27_on
     elsif (discomfort_index < AIRCON_COOLER_OFF_THRESHOLD || settings['sleep'] == '0') && settings['aircon_on_cooler_27'] != '0'
       aircon_off
     end
