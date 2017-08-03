@@ -82,7 +82,7 @@ if settings['home'] != '0' # 在宅中
 
     # 暖房
     if (discomfort_index < AIRCON_HEATER_ON_THRESHOLD && settings['sleep'] != '0') && settings['aircon_on_heater_25'] == '0'
-      if diff > 7.5 * 60 * 60 # 就寝から7時間以上経過
+      if diff > 7.5 * 60 * 60 # 就寝から7時間半以上経過
         aircon_heater_on
       end
     elsif (discomfort_index > AIRCON_HEATER_OFF_THRESHOLD || settings['sleep'] == '0') && settings['aircon_on_heater_25'] != '0'
