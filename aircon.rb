@@ -7,7 +7,9 @@ AIRCON_COOLER_OFF_THRESHOLD = 77.75
 AIRCON_HEATER_ON_THRESHOLD = 60.0
 AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
-current_dir = File.expand_path("..", __FILE__) + '/'
+def current_dir
+  return File.expand_path("..", __FILE__) + '/'
+end
 
 def aircon_cooler_on(irkit_file)
   irkit_file = current_dir + irkit_file
