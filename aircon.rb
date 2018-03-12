@@ -7,7 +7,10 @@ AIRCON_COOLER_OFF_THRESHOLD = 77.75
 AIRCON_HEATER_ON_THRESHOLD = 60.0
 AIRCON_HEATER_OFF_THRESHOLD = 65.0
 
+current_dir = File.expand_path("..", __FILE__) + '/'
+
 def aircon_cooler_on(irkit_file)
+  irkit_file = current_dir + irkit_file
   puts "use: #{irkit_file}"
   #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_cooler_27.irkit` ]
   #%x[ curl http://192.168.10.18/messages -d `cat aircon_on_dehumidify_28.irkit` ]
@@ -30,10 +33,12 @@ def aircon_cooler_28_on
 end
 
 def aircon_heater_on
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_heater_25.irkit` ]
+  irkit_file = 'aircon_on_heater_25.irkit'
+  irkit_file = current_dir + irkit_file
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "heater_on: #{$?}"
   sleep 0.5
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_on_heater_25.irkit` ]
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "heater_on: #{$?}"
   sleep 0.5
 
@@ -42,10 +47,12 @@ def aircon_heater_on
 end
 
 def aircon_off
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_off.irkit` ]
+  irkit_file = 'aircon_off.irkit'
+  irkit_file = current_dir + irkit_file
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "off: #{$?}"
   sleep 0.5
-  %x[ curl http://192.168.10.18/messages -d `cat aircon_off.irkit` ]
+  %x[ curl http://192.168.10.18/messages -d `cat #{irkit_file}` ]
   puts "off: #{$?}"
   sleep 0.5
 
