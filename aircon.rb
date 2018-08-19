@@ -100,7 +100,7 @@ if settings['home'] != '0' # 在宅中
 else
   diff = Time.now.to_i - (settings['away'] || '0').to_i
   p diff
-  if diff < 120 # 家を出たらエアコンを切る
+  if diff >= 60 * 15 && diff < 60 * (15 + 2)# 家を出たらエアコンを切る。Zenfone 5だとスリープ中におそらく勝手にWi-FiをOFFにされて短い間外出判定になることが頻発しているので、猶予を持たせる
     aircon_off
   end
 end
