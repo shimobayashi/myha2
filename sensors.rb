@@ -37,4 +37,4 @@ p json.to_json
 p `curl https://mackerel.io/api/v0/services/myha2/tsdb -H 'X-Api-Key: #{api_key}' -H 'Content-Type: application/json' -X POST -d '#{json.to_json.to_s}'`
 
 # Post to jsonjar
-p `curl "#{ENV['JSONJAR_ROOT']}?discomfort_index=#{discomfort_index}&lux=#{lux}"`
+p `curl "#{ENV['JSONJAR_ROOT']}?discomfort_index=#{discomfort_index}&lux=#{lux}&temperature=#{temperature}&humidity=#{humidity}"`
